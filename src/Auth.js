@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import app from "./base.js";
-
+import app,{auth} from "./base.js";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -8,10 +7,11 @@ export const AuthProvider = ({ children }) => {
   const [pending, setPending] = useState(true);
 
   useEffect(() => {
-    app.auth().onAuthStateChanged((user) => {
+    const unsubscribe=onAuthStateChanged(auth,(user) => {
       setCurrentUser(user)
       setPending(false)
     });
+    return unsubscribe
   }, []);
 
   if(pending){
